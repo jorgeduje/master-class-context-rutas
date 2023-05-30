@@ -3,19 +3,23 @@ import { createContext, useReducer } from "react";
 export const AuthContext = createContext();
 
 const initialState = {
-  user: {},
-  accessToken: "",
+  user: JSON.parse(localStorage.getItem("user")) || {} ,
+  accessToken: localStorage.getItem("token") || "" ,
 };
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
+      localStorage.setItem( "token" , action.payload.accessToken )
+      localStorage.setItem("user", JSON.stringify(action.payload.user) )
       return {
         ...state,
         user: action.payload.user,
         accessToken: action.payload.accessToken,
       };
     case "LOGOUT":
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
       return {
         ...state,
         user: {},
